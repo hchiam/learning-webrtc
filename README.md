@@ -31,7 +31,7 @@ To run this demo locally, you need to run commands in two separate terminals:
 1. Run `server.js`:
 
 ```sh
-yarn dev
+npm run dev
 ```
 
 and
@@ -39,9 +39,15 @@ and
 2. Run a local peer server:
 
 ```sh
-# yarn global add peer
+# npm install -g peer
 peerjs --port 3001 # peer server on http://localhost:3001
 # to close this process, close both tabs and then hit control+c
 ```
 
 _**NOTE:**_ you might not get videos to stream, but at least the blocks for video streams will appear/disappear as expected.
+
+## trystero-demo
+
+https://github.com/dmotz/trystero
+
+https://oxism.com/trystero/
