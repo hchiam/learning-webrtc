@@ -1,0 +1,30 @@
+{
+  "name": "webrtc-wds-demo",
+  "version": "1.0.0",
+  "description": "Just one of the things I'm learning. https://github.com/hchiam/learning",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "start": "yarn dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hchiam/learning-webrtc.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hchiam/learning-webrtc/issues"
+  },
+  "homepage": "https://github.com/hchiam/learning-webrtc#readme",
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "socket.io": "^2.3.0",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.1"
+  }
+}
