@@ -7,15 +7,41 @@ import { joinRoom } from "https://cdn.skypack.dev/pin/trystero@v0.18.0-r4w3880OH
 
 // .../?room=someNumberOrId
 const roomId = "room" + new URLSearchParams(window.location.search).get("room");
-const room = joinRoom({ appId: "trystero-demo1" }, roomId);
+const room = joinRoom({ appId: "hchiam-trystero-demo" }, roomId, "silly_pwd");
 
 const pre = document.querySelector("pre");
 
-room.onPeerJoin((userId) => {
-  console.log("userId", userId);
-  pre.textContent += `userId: ${userId}\n`;
+function log(text) {
+  pre.textContent += `${text}\n`;
+}
+
+// room.onPeerJoin((userId) => {
+//   console.log("userId", userId);
+//   log(`userId JOIN: ${userId}`);
+// });
+// room.onPeerLeave((userId) => {
+//   console.log("userId", userId);
+//   log(`userId LEFT: ${userId}`);
+// });
+
+const idsToNames = {};
+const [sendName, getName] = room.makeAction("name");
+
+// tell other peers currently in the room
+sendName(location.href);
+
+// tell newcomers
+room.onPeerJoin((peerId) => {
+  sendName(location.href, peerId);
 });
-room.onPeerLeave((userId) => {
-  console.log("userId", userId);
-  pre.textContent += `userId: ${userId}\n`;
+
+// listen for peers sending data
+getName((name, peerId) => {
+  idsToNames[peerId] = name;
+  log(`${name} JOINED`);
 });
+
+// listen for peers leaving
+room.onPeerLeave((peerId) =>
+  log(`${idsToNames[peerId] || "a weird stranger"} LEFT`)
+);
