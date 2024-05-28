@@ -3,7 +3,10 @@
  * https://oxism.com/trystero
  */
 
-import { joinRoom } from "https://cdn.skypack.dev/pin/trystero@v0.18.0-r4w3880OHw2o0euVPNYJ/mode=imports,min/optimized/trystero/nostr.js";
+import {
+  joinRoom,
+  selfId,
+} from "https://cdn.skypack.dev/pin/trystero@v0.18.0-r4w3880OHw2o0euVPNYJ/mode=imports,min/optimized/trystero/nostr.js";
 
 // .../?room=someNumberOrId
 const roomId = "room" + new URLSearchParams(window.location.search).get("room");
@@ -12,6 +15,7 @@ const room = joinRoom({ appId: "hchiam-trystero-demo" }, roomId, "silly_pwd");
 const pre = document.querySelector("pre");
 
 console.log("started");
+log(`my peerId: ${selfId}`);
 
 function log(text) {
   pre.textContent = `${text}\n`;
@@ -60,6 +64,7 @@ room.onPeerLeave((peerId) => {
 
 document.querySelector("#update").addEventListener("click", () => {
   myCount++;
+  localData[selfId] = myCount;
   localData.sharedCount++;
   const data = {
     ...localData,
