@@ -14,6 +14,10 @@ https://github.com/peers/peerjs
 
 https://peerjs.com
 
+https://www.youtube.com/watch?v=WmR9IMUD_CY
+
+https://github.com/fireship-io/webrtc-firebase-demo/blob/main/main.js
+
 PeerJS's server creates user IDs for you.
 
 ```html
