@@ -11,6 +11,8 @@ const room = joinRoom({ appId: "hchiam-trystero-demo" }, roomId, "silly_pwd");
 
 const pre = document.querySelector("pre");
 
+console.log("started");
+
 function log(text) {
   pre.textContent += `${text}\n`;
 }
@@ -28,20 +30,20 @@ const idsToNames = {};
 const [sendName, getName] = room.makeAction("name");
 
 // tell other peers currently in the room
-sendName(location.href);
+sendName(`Dear peers currently in the room, \nI'm at ${location.href}`);
 
 // tell newcomers
 room.onPeerJoin((peerId) => {
-  sendName(location.href, peerId);
+  sendName(`Dear newcomers, I'm ${peerId} \nat ${location.href}`, peerId);
 });
 
 // listen for peers sending data
 getName((name, peerId) => {
   idsToNames[peerId] = name;
-  log(`${name} JOINED`);
+  log(`${name} JOINED\n`);
 });
 
 // listen for peers leaving
 room.onPeerLeave((peerId) =>
-  log(`${idsToNames[peerId] || "a weird stranger"} LEFT`)
+  log(`${idsToNames[peerId] || "a weird stranger"} LEFT\n`)
 );
