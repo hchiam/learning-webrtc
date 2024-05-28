@@ -14,36 +14,49 @@ const pre = document.querySelector("pre");
 console.log("started");
 
 function log(text) {
-  pre.textContent += `${text}\n`;
+  pre.textContent = `${text}\n`;
 }
 
-// room.onPeerJoin((userId) => {
-//   console.log("userId", userId);
-//   log(`userId JOIN: ${userId}`);
-// });
-// room.onPeerLeave((userId) => {
-//   console.log("userId", userId);
-//   log(`userId LEFT: ${userId}`);
-// });
+room.onPeerJoin((userId) => {
+  console.log("userId", userId);
+  log(`userId JOIN: ${userId}`);
+});
+room.onPeerLeave((userId) => {
+  console.log("userId", userId);
+  log(`userId LEFT: ${userId}`);
+});
 
-const idsToNames = {};
-const [sendName, getName] = room.makeAction("name");
+const localData = { count: 1 };
+const [sendData, getData] = room.makeAction("data");
 
-// tell other peers currently in the room
-sendName(`Dear peers currently in the room, \nI'm at ${location.href}`);
+// // tell other peers currently in the room
+// sendData({ count: 1 });
 
 // tell newcomers
 room.onPeerJoin((peerId) => {
-  sendName(`Dear newcomers, I'm ${peerId} \nat ${location.href}`, peerId);
+  sendData(localData.count, peerId);
+  // localData.count = 1
+  console.log(localData);
+  log(JSON.stringify(localData));
 });
 
 // listen for peers sending data
-getName((name, peerId) => {
-  idsToNames[peerId] = name;
-  log(`${name} JOINED\n`);
+getData((data, peerId) => {
+  localData.count = data;
+  console.log(localData);
+  log(JSON.stringify(localData));
 });
 
 // listen for peers leaving
-room.onPeerLeave((peerId) =>
-  log(`${idsToNames[peerId] || "a weird stranger"} LEFT\n`)
-);
+room.onPeerLeave((peerId) => {
+  localData.count = 1;
+  console.log(localData);
+  log(JSON.stringify(localData));
+});
+
+document.querySelector("#update").addEventListener("click", () => {
+  localData.count++;
+  sendData(localData.count);
+  console.log(localData);
+  log(JSON.stringify(localData));
+});
