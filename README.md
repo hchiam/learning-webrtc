@@ -2,6 +2,8 @@
 
 Just one of the things I'm learning. https://github.com/hchiam/learning
 
+Use a browser API that enables P2P (peer-to-peer) communication. PeerJS can simplify some of working with it for you.
+
 https://codelabs.developers.google.com/codelabs/webrtc-web/#0
 
 https://www.youtube.com/watch?v=DvlyzDZDEq4
