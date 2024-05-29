@@ -48,9 +48,9 @@ _**NOTE:**_ you might not get videos to stream, but at least the blocks for vide
 
 ## trystero-demo
 
-[learning-webrtc/minimal-trystero-demo](https://github.com/hchiam/learning-webrtc/tree/main/minimal-trystero-demo)
+[learning-webrtc/minimal-trystero-demo](https://github.com/hchiam/learning-webrtc/tree/main/minimal-trystero-demo) --> `yarn dev` to `npm run vite`
 
-[learning-webrtc/trystero-demo](https://github.com/hchiam/learning-webrtc/tree/main/trystero-demo)
+[learning-webrtc/trystero-demo](https://github.com/hchiam/learning-webrtc/tree/main/trystero-demo) --> `yarn dev` to `npm run vite`
 
 https://github.com/dmotz/trystero
 
