@@ -24,6 +24,12 @@ PeerJS's server creates user IDs for you.
 <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
 ```
 
+## webrtc-netplayjs-demo
+
+Uses https://github.com/rameshvarun/netplayjs
+
+- https://hchiam-webrtc-netplayjs-demo-minimal.surge.sh/
+
 ## webrtc-wds-demo
 
 To run this demo locally, you need to run commands in two separate terminals:
