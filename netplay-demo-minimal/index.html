@@ -25,6 +25,9 @@
             // Generate player velocity from input keys.
             const vel = input.arrowKeys();
 
+            // Get coordinates of one or more simultaneous touches in the canvas:
+            // const touches = input.touches;
+
             // Apply the velocity to the appropriate player.
             if (player.getID() == 0) {
               this.aPos.x += vel.x * 5;

@@ -24,11 +24,13 @@ PeerJS's server creates user IDs for you.
 <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
 ```
 
-## webrtc-netplayjs-demo
+## netplay.js demos
 
 Uses https://github.com/rameshvarun/netplayjs
 
 - https://hchiam-webrtc-netplayjs-demo-minimal.surge.sh/
+
+- https://hchiam-netplay-demo.surge.sh/
 
 ## webrtc-wds-demo
 
