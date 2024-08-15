@@ -12,6 +12,7 @@
     </style>
   </head>
   <body>
+    <p id="output"></p>
     <script>
       class DemoGame extends netplayjs.Game {
         constructor(canvas, players) {
@@ -26,6 +27,8 @@
 
             const touches = input.touches;
 
+            document.querySelector("#output").innerText = JSON.stringify(input);
+
             const velocity = input.arrowKeys();
 
             // Apply the velocity to the appropriate player:
@@ -34,22 +37,32 @@
               this.aPos.y -= velocity.y * 5;
               if (isLocal && touches.length && touches[0]) {
                 const tap = touches[0];
-                console.log("tap", tap);
-                this.aPos.x -= (tap?.x && tap.x < window.innerWidth / 2) * 5;
-                this.aPos.x += (tap?.x && window.innerWidth / 2 < tap.x) * 5;
-                this.aPos.y -= (tap?.y && tap.y < window.innerHeight / 2) * 5;
-                this.aPos.y += (tap?.y && window.innerHeight / 2 < tap.y) * 5;
+                document.querySelector("#output").innerText =
+                  DemoGame.canvasSize.width;
+                this.aPos.x -=
+                  (tap?.x && tap.x < DemoGame.canvasSize.width / 2) * 5;
+                this.aPos.x +=
+                  (tap?.x && DemoGame.canvasSize.width / 2 < tap.x) * 5;
+                this.aPos.y -=
+                  (tap?.y && tap.y < DemoGame.canvasSize.height / 2) * 5;
+                this.aPos.y +=
+                  (tap?.y && DemoGame.canvasSize.height / 2 < tap.y) * 5;
               }
             } else if (player.getID() === 1) {
               this.bPos.x += velocity.x * 5;
               this.bPos.y -= velocity.y * 5;
               if (isLocal && touches.length && touches[0]) {
                 const tap = touches[0];
-                console.log("tap", tap);
-                this.bPos.x -= (tap?.x && tap.x < window.innerWidth / 2) * 5;
-                this.bPos.x += (tap?.x && window.innerWidth / 2 < tap.x) * 5;
-                this.bPos.y -= (tap?.y && tap.y < window.innerHeight / 2) * 5;
-                this.bPos.y += (tap?.y && window.innerHeight / 2 < tap.y) * 5;
+                document.querySelector("#output").innerText =
+                  DemoGame.canvasSize.width;
+                this.bPos.x -=
+                  (tap?.x && tap.x < DemoGame.canvasSize.width / 2) * 5;
+                this.bPos.x +=
+                  (tap?.x && DemoGame.canvasSize.width / 2 < tap.x) * 5;
+                this.bPos.y -=
+                  (tap?.y && tap.y < DemoGame.canvasSize.height / 2) * 5;
+                this.bPos.y +=
+                  (tap?.y && DemoGame.canvasSize.height / 2 < tap.y) * 5;
               }
             }
           }
