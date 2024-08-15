@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>netplay demo - browser buttons</title>
+    <script src="https://unpkg.com/netplayjs@0.4.1/dist/netplay.js"></script>
+    <style>
+      canvas {
+        z-index: -1 !important;
+      }
+    </style>
+  </head>
+  <body>
+    <button id="up">Up</button>
+    <button id="left">Left</button>
+    <button id="down">Down</button>
+    <button id="right">Right</button>
+    <p id="player"></p>
+    <p id="output"></p>
+    <p>
+      It seems only player 1 (A, red) is able to use browser buttons, and player
+      2 (B, blue) can't.
+    </p>
+    <script>
+      const $ = (s) => document.querySelector(s);
+      const $$ = (s) => document.querySelectorAll(s);
+
+      function hitEnter(event) {
+        const key =
+          event.key || event.code || event.keyCode || event.which || event;
+        return key === "Enter" || key === "ENTER" || key === 13;
+      }
+      function hitSpacebar(event) {
+        const key =
+          event.key || event.code || event.keyCode || event.which || event;
+        return key === " " || key === "Spacebar" || key === 32;
+      }
+
+      class ButtonsController {
+        constructor(selectorList) {
+          this.buttonsData = {};
+          this.populateButtonsData(selectorList);
+          this.addButtonListeners(selectorList);
+        }
+        populateButtonsData(selectorList) {
+          for (const selector of selectorList) {
+            this.buttonsData[selector] = { on: false };
+          }
+        }
+        addButtonListeners(selectorList) {
+          for (const selector of selectorList) {
+            $(selector).addEventListener("touchstart", () => {
+              this.buttonsData[selector].on = true;
+            });
+            $(selector).addEventListener("mousedown", () => {
+              this.buttonsData[selector].on = true;
+            });
+            $(selector).addEventListener("keydown", (event) => {
+              if (hitEnter(event) || hitSpacebar(event)) {
+                this.buttonsData[selector].on = true;
+              }
+            });
+            $(selector).addEventListener("touchend", () => {
+              this.buttonsData[selector].on = false;
+            });
+            $(selector).addEventListener("mouseup", () => {
+              this.buttonsData[selector].on = false;
+            });
+            $(selector).addEventListener("keyup", (event) => {
+              if (hitEnter(event) || hitSpacebar(event)) {
+                this.buttonsData[selector].on = false;
+              }
+            });
+          }
+        }
+      }
+
+      const buttons = new ButtonsController([
+        "#up",
+        "#left",
+        "#down",
+        "#right",
+      ]);
+    </script>
+    <script>
+      class DemoGame extends netplayjs.Game {
+        constructor(canvas, players) {
+          super();
+          this.aPos = { x: 100, y: 150 };
+          this.bPos = { x: 500, y: 150 };
+          $("#output").innerText = JSON.stringify(players);
+        }
+
+        tick(playerInputs) {
+          for (const [player, input] of playerInputs.entries()) {
+            const isLocal = player.isLocal;
+
+            // const touches = input.touches;
+
+            const velocity = input.arrowKeys();
+
+            if (isLocal) {
+              $("#player").innerText =
+                "You are player: " +
+                (player.getID() === 0 ? "A (red)" : "B (blue)");
+            }
+
+            // Apply the velocity to the appropriate player:
+            if (player.getID() === 0) {
+              this.aPos.x += velocity.x * 5;
+              this.aPos.y -= velocity.y * 5;
+              if (isLocal) {
+                this.aPos.x -= buttons.buttonsData["#left"].on * 5;
+                this.aPos.x += buttons.buttonsData["#right"].on * 5;
+                this.aPos.y -= buttons.buttonsData["#up"].on * 5;
+                this.aPos.y += buttons.buttonsData["#down"].on * 5;
+                $("#output").innerText =
+                  JSON.stringify(this.aPos) + JSON.stringify(this.bPos);
+              }
+            } else if (player.getID() === 1) {
+              this.bPos.x += velocity.x * 5;
+              this.bPos.y -= velocity.y * 5;
+              if (isLocal) {
+                this.bPos.x -= buttons.buttonsData["#left"].on * 5;
+                this.bPos.x += buttons.buttonsData["#right"].on * 5;
+                this.bPos.y -= buttons.buttonsData["#up"].on * 5;
+                this.bPos.y += buttons.buttonsData["#down"].on * 5;
+                $("#output").innerText =
+                  JSON.stringify(this.aPos) + JSON.stringify(this.bPos);
+              }
+            }
+          }
+        }
+
+        // serialize() {}
+
+        // deserialize(value) {}
+
+        draw(canvas) {
+          const ctx = canvas.getContext("2d");
+          this.drawEnvironment(ctx, canvas);
+          this.drawPlayers(ctx);
+        }
+
+        drawEnvironment(ctx, canvas) {
+          ctx.fillStyle = "black";
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+
+        drawPlayers(ctx) {
+          ctx.fillStyle = "red";
+          ctx.fillRect(this.aPos.x - 5, this.aPos.y - 5, 10, 10);
+          ctx.fillStyle = "blue";
+          ctx.fillRect(this.bPos.x - 5, this.bPos.y - 5, 10, 10);
+        }
+      }
+
+      DemoGame.timestep = 1000 / 60; // 60 FPS
+      DemoGame.canvasSize = { width: 600, height: 300 };
+
+      // note: if can't rewind game, use LockstepWrapper instead of Rollback netcode:
+      new netplayjs.RollbackWrapper(DemoGame).start();
+    </script>
+  </body>
+</html>
