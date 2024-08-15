@@ -1,0 +1,7 @@
+{
+    "scripts": {
+        "dev": "vite",
+        "start": "vite",
+        "deploy": "vite build; surge dist https://hchiam-netplay-demo-tapping.surge.sh/"
+    }
+}
