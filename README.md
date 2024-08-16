@@ -32,6 +32,8 @@ Uses https://github.com/rameshvarun/netplayjs
 
 - https://hchiam-netplay-demo.surge.sh/
 
+- see the netplay-demo-... folders for more examples/experiments
+
 ## webrtc-wds-demo
 
 To run this demo locally, you need to run commands in two separate terminals:
