@@ -14,7 +14,8 @@ const $ = (s) => document.querySelector(s);
 const $$ = (s) => document.querySelectorAll(s);
 
 // .../?room=someNumberOrId
-const roomId = "room" + new URLSearchParams(window.location.search).get("room");
+const roomId =
+  "room" + (new URLSearchParams(window.location.search).get("room") || 42);
 const room = joinRoom({ appId: "hchiam-trystero-demo" }, roomId, "silly_pwd");
 
 const pre = $("pre");
