@@ -5,7 +5,7 @@
 
 import { joinRoom } from "https://cdn.skypack.dev/pin/trystero@v0.18.0-r4w3880OHw2o0euVPNYJ/mode=imports,min/optimized/trystero/nostr.js";
 
-const room = joinRoom({ appId: "trystero-demo1" }, "room49");
+const room = joinRoom({ appId: "hchiam-minimal-trystero-demo" }, "room49");
 
 const pre = document.querySelector("pre");
 
