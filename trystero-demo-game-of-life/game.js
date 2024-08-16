@@ -1,29 +1,29 @@
 export class GameController {
   constructor(sendData, updateUi) {
-    this.sendData = sendData;
     this.updateUi = updateUi;
+    this.sendData = sendData;
   }
 
-  startGame(localData) {
-    this.initBoard(localData);
+  #_update(localData) {
+    this.updateUi();
     this.sendData(localData);
   }
 
-  initBoard(localData) {
+  startGame(localData) {
     localData._board = get2dArray(10, 10, "x");
+    this.#_update(localData);
   }
 
   play(localData) {
     localData._board[0][0] = "o";
-    this.sendData(localData);
+    this.#_update(localData);
   }
 
   updatePosition(localData, peerId, xDelta = 0, yDelta = 0) {
     const { x, y } = localData[peerId];
     localData[peerId].x = x === undefined ? xDelta : Number(x) + Number(xDelta);
     localData[peerId].y = y === undefined ? yDelta : Number(y) + Number(yDelta);
-    this.updateUi();
-    this.sendData(localData);
+    this.#_update(localData);
   }
 }
 
