@@ -6,10 +6,15 @@
  * }
  */
 export function runGame(localData, updateCallback) {
-  console.log("init runGame 1", localData);
   initBoard(localData);
   updateCallback(localData);
-  console.log("init runGame 2", localData);
+}
+
+export function play(localData, updateCallback) {
+  console.log("localData", localData);
+  localData._board[0][0] = "o";
+  console.log("localData", localData);
+  updateCallback(localData);
 }
 
 function initBoard(localData) {
