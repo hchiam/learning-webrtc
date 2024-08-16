@@ -40,8 +40,14 @@ room.onPeerLeave((userId) => {
 });
 
 let localData = {};
-const [sendData, getData] = room.makeAction("data");
-const game = new GameController(sendData);
+const [sendOutData, getData] = room.makeAction("data");
+const game = new GameController(sendData, printPlayers);
+
+function sendData(data) {
+  // use this to debug whether data is bouncing back and forth unnecessarily
+  console.log("data", data);
+  sendOutData(data);
+}
 
 // tell other peers currently in the room
 localData[selfId] = { playerId: 0 };
@@ -51,11 +57,15 @@ sendData(localData);
 room.onPeerJoin((peerId) => {
   if (!(peerId in localData)) localData[peerId] = { playerId: 0 };
   if (!isNaN(localData[peerId].playerId) && localData[peerId].playerId === 0) {
-    const max =
-      Math.max(
-        ...Object.values(localData).map((x) => (isNaN(x) ? 0 : Number(x)))
-      ) + 1;
-    localData[peerId].playerId = Math.max(max, Object.keys(localData).length);
+    const maxPlayerId = Math.max(
+      ...Object.values(localData).map((x) =>
+        isNaN(x.playerId) ? 0 : Number(x.playerId)
+      )
+    );
+    localData[peerId].playerId = Math.max(
+      maxPlayerId + 1,
+      Object.keys(localData).length
+    );
     sendData(localData, peerId);
   }
   console.log("onPeerJoin", peerId);
@@ -66,18 +76,22 @@ room.onPeerJoin((peerId) => {
 getData((data, peerId) => {
   // console.log("_______|\n\n", "getData localData", JSON.stringify(localData));
   // console.log("getData data", JSON.stringify(data));
-  const before = JSON.stringify(localData);
   Object.entries(data).forEach((x) => {
     localData[x[0]] = x[1];
   });
+  const before = JSON.stringify(localData);
   let needToSendData = false;
   if (!(peerId in localData)) localData[peerId] = { playerId: 0 };
   if (!isNaN(localData[peerId].playerId) && localData[peerId].playerId === 0) {
-    const max =
-      Math.max(
-        ...Object.values(localData).map((x) => (isNaN(x) ? 0 : Number(x)))
-      ) + 1;
-    localData[peerId].playerId = Math.max(max, Object.keys(localData).length);
+    const maxPlayerId = Math.max(
+      ...Object.values(localData).map((x) =>
+        isNaN(x.playerId) ? 0 : Number(x.playerId)
+      )
+    );
+    localData[peerId].playerId = Math.max(
+      maxPlayerId + 1,
+      Object.keys(localData).length
+    );
     needToSendData = true;
   }
   if (before !== JSON.stringify(localData)) {
@@ -121,27 +135,16 @@ $("#play").addEventListener("click", () => {
   game.play(localData);
 });
 
-$("#left").addEventListener("keydown", () => {
-  console.log("got in keydown");
-  game.updatePosition(localData, selfId, -1);
+// button clicks work on both desktop and mobile and keyboard
+$("#left").addEventListener("click", () => {
+  game.updatePosition(localData, selfId, -1, 0);
 });
-$("#left").addEventListener("mousedown", () => {
-  console.log("got in mousedown");
-  game.updatePosition(localData, selfId, -1);
+$("#right").addEventListener("click", () => {
+  game.updatePosition(localData, selfId, +1, 0);
 });
-$("#left").addEventListener("touchstart", () => {
-  console.log("got in touchstart");
-  game.updatePosition(localData, selfId, -1);
+$("#up").addEventListener("click", () => {
+  game.updatePosition(localData, selfId, 0, -1);
 });
-// $("#left").addEventListener("keyup", () => {
-//   console.log("got in keyup");
-//   game.updatePosition(localData, selfId, -1);
-// });
-// $("#left").addEventListener("mouseup", () => {
-//   console.log("got in mouseup");
-//   game.updatePosition(localData, selfId, -1);
-// });
-// $("#left").addEventListener("touchend", () => {
-//   console.log("got in touchend");
-//   game.updatePosition(localData, selfId, -1);
-// });
+$("#down").addEventListener("click", () => {
+  game.updatePosition(localData, selfId, 0, +1);
+});

@@ -1,6 +1,7 @@
 export class GameController {
-  constructor(sendData) {
+  constructor(sendData, updateUi) {
     this.sendData = sendData;
+    this.updateUi = updateUi;
   }
 
   startGame(localData) {
@@ -21,6 +22,7 @@ export class GameController {
     const { x, y } = localData[peerId];
     localData[peerId].x = x === undefined ? xDelta : Number(x) + Number(xDelta);
     localData[peerId].y = y === undefined ? yDelta : Number(y) + Number(yDelta);
+    this.updateUi();
     this.sendData(localData);
   }
 }
