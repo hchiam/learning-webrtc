@@ -62,6 +62,10 @@ _**NOTE:**_ you might not get videos to stream, but at least the blocks for vide
 
 - https://hchiam-minimal-trystero-demo.surge.sh/
 
+[learning-webrtc/minimal-2-trystero-demo](https://github.com/hchiam/learning-webrtc/tree/main/minimal-2-trystero-demo) --> `yarn dev` to `npm run vite`
+
+- https://hchiam-minimal-2-trystero-demo.surge.sh/
+
 [learning-webrtc/trystero-demo](https://github.com/hchiam/learning-webrtc/tree/main/trystero-demo) --> `yarn dev` to `npm run vite`
 
 - https://hchiam-trystero-demo.surge.sh/
