@@ -1,24 +1,28 @@
-/**
- * updateCallback(localData):
- * (data) => {
- *   localData = data;
- *   sendData(localData);
- * }
- */
-export function runGame(localData, updateCallback) {
-  initBoard(localData);
-  updateCallback(localData);
-}
+export class GameController {
+  constructor(sendData) {
+    this.sendData = sendData;
+  }
 
-export function play(localData, updateCallback) {
-  console.log("localData", localData);
-  localData._board[0][0] = "o";
-  console.log("localData", localData);
-  updateCallback(localData);
-}
+  startGame(localData) {
+    this.initBoard(localData);
+    this.sendData(localData);
+  }
 
-function initBoard(localData) {
-  localData._board = get2dArray(10, 10, "x");
+  initBoard(localData) {
+    localData._board = get2dArray(10, 10, "x");
+  }
+
+  play(localData) {
+    localData._board[0][0] = "o";
+    this.sendData(localData);
+  }
+
+  updatePosition(localData, peerId, xDelta = 0, yDelta = 0) {
+    const { x, y } = localData[peerId];
+    localData[peerId].x = x === undefined ? xDelta : Number(x) + Number(xDelta);
+    localData[peerId].y = y === undefined ? yDelta : Number(y) + Number(yDelta);
+    this.sendData(localData);
+  }
 }
 
 function get2dArray(rows, cols, val = "") {

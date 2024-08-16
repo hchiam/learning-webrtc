@@ -8,7 +8,7 @@ import {
   selfId,
 } from "https://cdn.skypack.dev/pin/trystero@v0.18.0-r4w3880OHw2o0euVPNYJ/mode=imports,min/optimized/trystero/nostr.js";
 
-import { runGame, play } from "./game";
+import { GameController } from "./game";
 
 const $ = (s) => document.querySelector(s);
 const $$ = (s) => document.querySelectorAll(s);
@@ -41,19 +41,21 @@ room.onPeerLeave((userId) => {
 
 let localData = {};
 const [sendData, getData] = room.makeAction("data");
+const game = new GameController(sendData);
 
 // tell other peers currently in the room
-localData[selfId] = 0;
+localData[selfId] = { playerId: 0 };
 sendData(localData);
 
 // tell newcomers
 room.onPeerJoin((peerId) => {
-  if (!isNaN(localData[peerId]) && localData[peerId] === 0) {
+  if (!(peerId in localData)) localData[peerId] = { playerId: 0 };
+  if (!isNaN(localData[peerId].playerId) && localData[peerId].playerId === 0) {
     const max =
       Math.max(
         ...Object.values(localData).map((x) => (isNaN(x) ? 0 : Number(x)))
       ) + 1;
-    localData[peerId] = Math.max(max, Object.keys(localData).length);
+    localData[peerId].playerId = Math.max(max, Object.keys(localData).length);
     sendData(localData, peerId);
   }
   console.log("onPeerJoin", peerId);
@@ -69,12 +71,13 @@ getData((data, peerId) => {
     localData[x[0]] = x[1];
   });
   let needToSendData = false;
-  if (!isNaN(localData[peerId]) && localData[peerId] === 0) {
+  if (!(peerId in localData)) localData[peerId] = { playerId: 0 };
+  if (!isNaN(localData[peerId].playerId) && localData[peerId].playerId === 0) {
     const max =
       Math.max(
         ...Object.values(localData).map((x) => (isNaN(x) ? 0 : Number(x)))
       ) + 1;
-    localData[peerId] = Math.max(max, Object.keys(localData).length);
+    localData[peerId].playerId = Math.max(max, Object.keys(localData).length);
     needToSendData = true;
   }
   if (before !== JSON.stringify(localData)) {
@@ -104,19 +107,41 @@ function printPlayers() {
   const playersData = Object.entries(localData).filter(
     (x) => !x[0].startsWith("_")
   );
-  const players = playersData.map((x) => `${x[0]}: ${x[1]}`).join("\n");
+  const players = playersData
+    .map((x) => `${x[0]}: ${JSON.stringify(x[1])}`)
+    .join("\n");
   const boardData = localData._board ?? [[]];
   const board = boardData.map((row) => row.join(" ")).join("\n");
   log(board + "\nplayers:\n" + players);
 }
 
-function updateData(data) {
-  localData = data;
-  sendData(localData);
-}
-
-runGame(localData, updateData);
+game.startGame(localData);
 
 $("#play").addEventListener("click", () => {
-  play(localData, updateData);
+  game.play(localData);
 });
+
+$("#left").addEventListener("keydown", () => {
+  console.log("got in keydown");
+  game.updatePosition(localData, selfId, -1);
+});
+$("#left").addEventListener("mousedown", () => {
+  console.log("got in mousedown");
+  game.updatePosition(localData, selfId, -1);
+});
+$("#left").addEventListener("touchstart", () => {
+  console.log("got in touchstart");
+  game.updatePosition(localData, selfId, -1);
+});
+// $("#left").addEventListener("keyup", () => {
+//   console.log("got in keyup");
+//   game.updatePosition(localData, selfId, -1);
+// });
+// $("#left").addEventListener("mouseup", () => {
+//   console.log("got in mouseup");
+//   game.updatePosition(localData, selfId, -1);
+// });
+// $("#left").addEventListener("touchend", () => {
+//   console.log("got in touchend");
+//   game.updatePosition(localData, selfId, -1);
+// });
