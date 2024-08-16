@@ -68,18 +68,22 @@ getData((data, peerId) => {
   Object.entries(data).forEach((x) => {
     localData[x[0]] = x[1];
   });
+  let needToSendData = false;
   if (!isNaN(localData[peerId]) && localData[peerId] === 0) {
     const max =
       Math.max(
         ...Object.values(localData).map((x) => (isNaN(x) ? 0 : Number(x)))
       ) + 1;
     localData[peerId] = Math.max(max, Object.keys(localData).length);
-    sendData(localData);
+    needToSendData = true;
   }
   if (before !== JSON.stringify(localData)) {
-    sendData(localData);
+    needToSendData = true;
   }
-  // console.log("getData localData AFTER:", JSON.stringify(localData), "\n\n|_______");
+  if (needToSendData) sendData(localData);
+  // console.log(
+  //   `getData localData AFTER:\n${JSON.stringify(localData)}\n\n|_______`
+  // );
   printPlayers();
 });
 
