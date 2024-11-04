@@ -16,7 +16,7 @@ Use a browser API that enables P2P (peer-to-peer) communication. PeerJS can simp
 
 <https://www.youtube.com/watch?v=WmR9IMUD_CY>
 
-<https://github.com/fireship-io/webrtc-firebase-demo/blob/main/main.js>
+<https://github.com/fireship-io/webrtc-firebase-demo>
 
 PeerJS's server creates user IDs for you.
 
