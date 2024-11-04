@@ -1,22 +1,22 @@
 # Learning WebRTC
 
-Just one of the things I'm learning. https://github.com/hchiam/learning
+Just one of the things I'm learning. <https://github.com/hchiam/learning>
 
 Use a browser API that enables P2P (peer-to-peer) communication. PeerJS can simplify some of working with it for you.
 
-https://codelabs.developers.google.com/codelabs/webrtc-web/#0
+<https://codelabs.developers.google.com/codelabs/webrtc-web/#0>
 
-https://www.youtube.com/watch?v=DvlyzDZDEq4
+<https://www.youtube.com/watch?v=DvlyzDZDEq4>
 
-https://github.com/WebDevSimplified/Zoom-Clone-With-WebRTC
+<https://github.com/WebDevSimplified/Zoom-Clone-With-WebRTC>
 
-https://github.com/peers/peerjs
+<https://github.com/peers/peerjs>
 
-https://peerjs.com
+<https://peerjs.com>
 
-https://www.youtube.com/watch?v=WmR9IMUD_CY
+<https://www.youtube.com/watch?v=WmR9IMUD_CY>
 
-https://github.com/fireship-io/webrtc-firebase-demo/blob/main/main.js
+<https://github.com/fireship-io/webrtc-firebase-demo/blob/main/main.js>
 
 PeerJS's server creates user IDs for you.
 
@@ -26,11 +26,11 @@ PeerJS's server creates user IDs for you.
 
 ## netplay.js demos
 
-Uses https://github.com/rameshvarun/netplayjs
+Uses <https://github.com/rameshvarun/netplayjs>
 
-- https://hchiam-webrtc-netplayjs-demo-minimal.surge.sh/
+- <https://hchiam-webrtc-netplayjs-demo-minimal.surge.sh/>
 
-- https://hchiam-netplay-demo.surge.sh/
+- <https://hchiam-netplay-demo.surge.sh/>
 
 - see the netplay-demo-... folders for more examples/experiments
 
@@ -60,20 +60,20 @@ _**NOTE:**_ you might not get videos to stream, but at least the blocks for vide
 
 [learning-webrtc/minimal-trystero-demo](https://github.com/hchiam/learning-webrtc/tree/main/minimal-trystero-demo) --> `yarn dev` to `npm run vite`
 
-- https://hchiam-minimal-trystero-demo.surge.sh/
+- <https://hchiam-minimal-trystero-demo.surge.sh/>
 
 [learning-webrtc/minimal-2-trystero-demo](https://github.com/hchiam/learning-webrtc/tree/main/minimal-2-trystero-demo) --> `yarn dev` to `npm run vite`
 
-- https://hchiam-minimal-2-trystero-demo.surge.sh/
+- <https://hchiam-minimal-2-trystero-demo.surge.sh/>
 
 [learning-webrtc/trystero-demo](https://github.com/hchiam/learning-webrtc/tree/main/trystero-demo) --> `yarn dev` to `npm run vite`
 
-- https://hchiam-trystero-demo.surge.sh/
+- <https://hchiam-trystero-demo.surge.sh/>
 
-### More with trystero:
+### More with trystero
 
-https://github.com/hchiam/trysterollup
+<https://github.com/hchiam/trysterollup>
 
-https://github.com/dmotz/trystero
+<https://github.com/dmotz/trystero>
 
-https://oxism.com/trystero/
+<https://oxism.com/trystero/>
