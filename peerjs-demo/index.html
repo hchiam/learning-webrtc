@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PeerJS demo</title>
+    <style>
+      * {
+        background: black;
+        color: white;
+      }
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+      }
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    </style>
+    <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+  </head>
+  <body>
+    <main>
+      <label>myId: <input type="text" id="myId" readonly /></label>
+      <p>
+        <button id="connect">Connect to:</button>
+      </p>
+      <label
+        >peerId: <input id="peerId" type="text" placeholder="peerId"
+      /></label>
+    </main>
+    <script>
+      const myIdInput = document.querySelector("#myId");
+      myIdInput.value = String(Math.round(Math.random() * 10 ** 7));
+      myId = myIdInput.value;
+      const peer = new Peer(myId, {
+        config: {
+          iceServers: [
+            { urls: "stun:stun.l.google.com:19302" },
+            {
+              urls: [
+                "turn:openrelay.metered.ca:80",
+                "turn:openrelay.metered.ca:443",
+                "turn:openrelay.metered.ca:443?transport=tcp",
+              ],
+              username: "openrelayproject",
+              credential: "openrelayproject",
+            },
+          ],
+        },
+        debug: 3, // This will help you see more detailed logs
+      });
+
+      document.querySelector("#connect").addEventListener("click", connect);
+
+      peer.on("error", (err) => {
+        console.error("PeerJS error:", err);
+      });
+
+      function connect() {
+        const peerId = document.querySelector("#peerId").value;
+        const conn = peer.connect(peerId);
+
+        conn.on("error", (err) => {
+          console.error("Connection error:", err);
+        });
+
+        conn.on("open", () => {
+          console.log("Connection opened successfully");
+          conn.send("hi!");
+        });
+
+        peer.on("connection", (conn) => {
+          console.log("Incoming connection");
+
+          conn.on("error", (err) => {
+            console.error("Data connection error:", err);
+          });
+
+          conn.on("data", (data) => {
+            console.log("Received data:", data);
+          });
+
+          conn.on("open", () => {
+            console.log("Connection ready, sending hello");
+            conn.send("hello!");
+          });
+        });
+      }
+    </script>
+  </body>
+</html>
