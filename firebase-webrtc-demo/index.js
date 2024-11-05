@@ -45,12 +45,13 @@ async function joinExistingRoom() {
   try {
     currentRoom = new RoomConnector(roomId);
     currentRoom.onMessage((msg) => showMessage(`Peer: ${msg}`));
-    await currentRoom.joinRoom();
 
+    await currentRoom.joinRoom(); // This now waits for connection to open
     showStatus(`Connected in room ${roomId}!`);
     enableMessageArea();
   } catch (error) {
     showStatus(`Error: ${error.message}`);
+    console.error("Connection error:", error);
   }
 }
 
