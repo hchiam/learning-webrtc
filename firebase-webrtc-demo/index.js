@@ -1,11 +1,24 @@
 import { RoomConnector } from "./connect.js";
 
 document.querySelector("#createRoom").addEventListener("click", createNewRoom);
-
 document.querySelector("#joinRoom").addEventListener("click", joinExistingRoom);
+document.querySelector("#sendMessage").addEventListener("click", sendMessage);
+
+let currentRoom = null;
 
 function showStatus(message) {
   document.getElementById("status").textContent = message;
+}
+
+function showMessage(message) {
+  const messagesDiv = document.getElementById("messages");
+  const messageEl = document.createElement("div");
+  messageEl.textContent = message;
+  messagesDiv.appendChild(messageEl);
+}
+
+function enableMessageArea() {
+  document.getElementById("messageArea").style.display = "block";
 }
 
 async function createNewRoom() {
@@ -14,10 +27,12 @@ async function createNewRoom() {
 
   showStatus(`Room created: ${roomId}. Waiting for someone to join...`);
 
-  const room = new RoomConnector(roomId);
-  await room.createRoom();
+  currentRoom = new RoomConnector(roomId);
+  currentRoom.onMessage((msg) => showMessage(`Peer: ${msg}`));
+  await currentRoom.createRoom();
 
-  showStatus(`Someone joined room ${roomId}! We are connected!`);
+  showStatus(`Connected in room ${roomId}!`);
+  enableMessageArea();
 }
 
 async function joinExistingRoom() {
@@ -28,10 +43,34 @@ async function joinExistingRoom() {
   }
 
   try {
-    const room = new RoomConnector(roomId);
-    await room.joinRoom();
-    showStatus(`Successfully joined room ${roomId}!`);
+    currentRoom = new RoomConnector(roomId);
+    currentRoom.onMessage((msg) => showMessage(`Peer: ${msg}`));
+    await currentRoom.joinRoom();
+
+    showStatus(`Connected in room ${roomId}!`);
+    enableMessageArea();
   } catch (error) {
     showStatus(`Error: ${error.message}`);
   }
 }
+
+function sendMessage() {
+  const input = document.getElementById("messageInput");
+  const message = input.value;
+
+  if (currentRoom && message) {
+    if (currentRoom.sendMessage(message)) {
+      showMessage(`Me: ${message}`);
+      input.value = "";
+    } else {
+      showMessage("Not connected yet...");
+    }
+  }
+}
+
+// Clean up on page close
+window.addEventListener("unload", () => {
+  if (currentRoom) {
+    currentRoom.disconnect();
+  }
+});
