@@ -84,8 +84,6 @@
         debug: 3, // This will help you see more detailed logs
       });
 
-      document.querySelector("#connect").addEventListener("click", connect);
-
       function addMessage(message, fromMe = false) {
         const messageElement = document.createElement("div");
         messageElement.textContent = `${fromMe ? "Me" : "Peer"}: ${message}`;
@@ -110,29 +108,18 @@
         }
       });
 
-      peer.on("error", (err) => {
-        console.error("PeerJS error:", err);
-      });
-
-      function connect() {
-        const peerId = document.querySelector("#peerId").value;
-        const conn = peer.connect(peerId);
-
-        setupConnection(conn);
-      }
-
       function setupConnection(conn) {
-        activeConnection = conn;
-        sendButton.disabled = false; // Enable send button when connected
+        conn.on("open", () => {
+          console.log("Connection opened successfully");
+          activeConnection = conn; // Only set active connection after open
+          sendButton.disabled = false;
+          addMessage("Connected to peer!", true);
+        });
 
         conn.on("error", (err) => {
           console.error("Connection error:", err);
           sendButton.disabled = true;
-        });
-
-        conn.on("open", () => {
-          console.log("Connection opened successfully");
-          addMessage("Connected to peer!", true);
+          activeConnection = null;
         });
 
         conn.on("close", () => {
@@ -148,9 +135,38 @@
         });
       }
 
+      function connect() {
+        const peerId = document.querySelector("#peerId").value;
+        if (peerId) {
+          const conn = peer.connect(peerId);
+          setupConnection(conn);
+        }
+      }
+
+      document.querySelector("#connect").addEventListener("click", connect);
+
+      // Handle incoming connections
       peer.on("connection", (conn) => {
         console.log("Incoming connection");
         setupConnection(conn);
+      });
+
+      peer.on("error", (err) => {
+        console.error("PeerJS error:", err);
+        addMessage("Connection error: " + err, true);
+      });
+
+      // Add connection status for peer
+      peer.on("open", (id) => {
+        console.log("My peer ID is: " + id);
+        addMessage("Ready to connect. Your ID: " + id, true);
+      });
+
+      peer.on("disconnected", () => {
+        console.log("Peer disconnected");
+        addMessage("Peer disconnected", true);
+        sendButton.disabled = true;
+        activeConnection = null;
       });
     </script>
   </body>
