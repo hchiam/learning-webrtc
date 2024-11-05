@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Firebase WebRTC demo</title>
+
+    <style>
+      * {
+        background: black;
+        color: white;
+      }
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+      }
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    </style>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+  </head>
+  <body>
+    <main>
+      <div>
+        <button id="createRoom">Create Room</button>
+        <button id="joinRoom">Join Room</button>
+        <input type="text" id="roomId" placeholder="Room ID" />
+      </div>
+      <div id="status"></div>
+    </main>
+    <script type="module" src="connect.js"></script>
+    <script type="module" src="index.js"></script>
+  </body>
+</html>

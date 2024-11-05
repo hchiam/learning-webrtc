@@ -77,3 +77,9 @@ _**NOTE:**_ you might not get videos to stream, but at least the blocks for vide
 <https://github.com/dmotz/trystero>
 
 <https://oxism.com/trystero/>
+
+## Firebase database with WebRTC
+
+[learning-webrtc/firebase-webrtc-demo](https://github.com/hchiam/learning-webrtc/tree/main/firebase-webrtc-demo)
+
+<https://firebase-webrtc-demo.surge.sh/>
