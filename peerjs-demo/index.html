@@ -19,6 +19,22 @@
         justify-content: center;
         align-items: center;
       }
+      #messages {
+        margin-top: 20px;
+        border: 1px solid #333;
+        padding: 10px;
+        min-height: 100px;
+        width: 100%;
+      }
+      .message-input {
+        margin-top: 10px;
+        width: 100%;
+        display: flex;
+        gap: 10px;
+      }
+      #messageInput {
+        flex-grow: 1;
+      }
     </style>
     <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
   </head>
@@ -31,11 +47,25 @@
       <label
         >peerId: <input id="peerId" type="text" placeholder="peerId"
       /></label>
+
+      <div id="messages"></div>
+
+      <div class="message-input">
+        <input type="text" id="messageInput" placeholder="Type a message..." />
+        <button id="sendButton" disabled>Send</button>
+      </div>
     </main>
     <script>
       const myIdInput = document.querySelector("#myId");
+      const messageInput = document.querySelector("#messageInput");
+      const sendButton = document.querySelector("#sendButton");
+      const messagesDiv = document.querySelector("#messages");
+
       myIdInput.value = String(Math.round(Math.random() * 10 ** 7));
       myId = myIdInput.value;
+
+      let activeConnection = null;
+
       const peer = new Peer(myId, {
         config: {
           iceServers: [
@@ -56,6 +86,30 @@
 
       document.querySelector("#connect").addEventListener("click", connect);
 
+      function addMessage(message, fromMe = false) {
+        const messageElement = document.createElement("div");
+        messageElement.textContent = `${fromMe ? "Me" : "Peer"}: ${message}`;
+        messagesDiv.appendChild(messageElement);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      }
+
+      function sendMessage() {
+        if (activeConnection && messageInput.value.trim()) {
+          const message = messageInput.value.trim();
+          activeConnection.send(message);
+          addMessage(message, true);
+          messageInput.value = "";
+        }
+      }
+
+      sendButton.addEventListener("click", sendMessage);
+
+      messageInput.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") {
+          sendMessage();
+        }
+      });
+
       peer.on("error", (err) => {
         console.error("PeerJS error:", err);
       });
@@ -64,32 +118,40 @@
         const peerId = document.querySelector("#peerId").value;
         const conn = peer.connect(peerId);
 
+        setupConnection(conn);
+      }
+
+      function setupConnection(conn) {
+        activeConnection = conn;
+        sendButton.disabled = false; // Enable send button when connected
+
         conn.on("error", (err) => {
           console.error("Connection error:", err);
+          sendButton.disabled = true;
         });
 
         conn.on("open", () => {
           console.log("Connection opened successfully");
-          conn.send("hi!");
+          addMessage("Connected to peer!", true);
         });
 
-        peer.on("connection", (conn) => {
-          console.log("Incoming connection");
+        conn.on("close", () => {
+          console.log("Connection closed");
+          sendButton.disabled = true;
+          addMessage("Connection closed", true);
+          activeConnection = null;
+        });
 
-          conn.on("error", (err) => {
-            console.error("Data connection error:", err);
-          });
-
-          conn.on("data", (data) => {
-            console.log("Received data:", data);
-          });
-
-          conn.on("open", () => {
-            console.log("Connection ready, sending hello");
-            conn.send("hello!");
-          });
+        conn.on("data", (data) => {
+          console.log("Received data:", data);
+          addMessage(data, false);
         });
       }
+
+      peer.on("connection", (conn) => {
+        console.log("Incoming connection");
+        setupConnection(conn);
+      });
     </script>
   </body>
 </html>
