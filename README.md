@@ -83,3 +83,9 @@ _**NOTE:**_ you might not get videos to stream, but at least the blocks for vide
 [learning-webrtc/firebase-webrtc-demo](https://github.com/hchiam/learning-webrtc/tree/main/firebase-webrtc-demo)
 
 <https://firebase-webrtc-demo.surge.sh/>
+
+## PeerJS demo
+
+[learning-webrtc/peerjs-demo](https://github.com/hchiam/learning-webrtc/tree/main/peerjs-demo)
+
+<https://peerjs-demo.surge.sh>
