@@ -7,6 +7,6 @@
     "start": "npm run vite",
     "dev": "vite",
     "build": "vite build",
-    "deploy": "vite build; surge dist https://hchiam-minimal-trystero-demo.surge.sh/"
+    "deploy": "vite build; surge dist https://minimal-trystero-firebase-demo.surge.sh/"
   }
 }
