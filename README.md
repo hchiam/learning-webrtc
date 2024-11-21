@@ -2,7 +2,17 @@
 
 Just one of the things I'm learning. <https://github.com/hchiam/learning>
 
-Use a browser API that enables P2P (peer-to-peer) communication. PeerJS can simplify some of working with it for you.
+Use a browser API that enables P2P (peer-to-peer) communication. Libraries like PeerJS can simplify some of working with it for you.
+
+## Debug
+
+https://youtu.be/ziU_VxaDmDk?feature=shared
+- try chrome://webrtc-internals 
+- top "tabs" should be limited to tabs, i think? 
+- "=>" summary at top 
+- ICE candidate grid, expand that 
+
+## Some resources I tried
 
 <https://codelabs.developers.google.com/codelabs/webrtc-web/#0>
 
